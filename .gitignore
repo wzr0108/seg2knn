@@ -1,10 +1,9 @@
-data
+checkpoints
 work_dirs
 pretrained
 .idea
 results
 result
-checkpoints
 
 */*/__pycache__/
 */*/*/__pycache__/
