@@ -50,3 +50,50 @@ python test.py config.py checkpoints/iter_80000_unwrap.pth --format-only --eval-
 ```
 
 the results will be saved in ./result/
+
+```
+result/HAIMA.json # segmentation results
+result/HAIMA.npy  # instance map 
+result/HAIMA.tif  # overlay of segmentation contour and H&E image
+```
+
+## Count Nuclei in Spot
+
+```
+python nucleus_in_spot.py
+```
+
+the results will be saved in ./result/
+
+```
+result/xy_index.txt  # barcode and corresponding number and location of nuclei
+                     # for each line :
+                     # barcode, col, row, number of nucleus, location of nucleus(x, y)
+```
+
+## Infer Cell Type (combined with deconvolution results)
+
+```
+python assign_cell_type.py
+```
+
+the results will be saved in ./result/
+
+```
+result/nucleus_xy_type.txt  # location of nucleus and its type
+result/nucleus_type.pdf  # visualization
+```
+
+## Infer Cell Types Outside The Spot
+
+```
+python knn.py
+```
+
+python knn.py
+
+```
+result/all_nucleus_xy_type.txt  # location of nucleus and its type
+result/all_nucleus_type.pdf  # visualization
+```
+

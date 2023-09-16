@@ -16,3 +16,4 @@ tqdm==4.48.2
 wcwidth==0.2.5
 scikit-image==0.19.3
 fastremap==1.13.5
+scikit-learn==0.23.1
