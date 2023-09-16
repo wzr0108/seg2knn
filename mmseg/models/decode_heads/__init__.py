@@ -16,12 +16,9 @@ from .daformer_head_proto import DAFormerHeadWithProto
 from .cellpose_head import CellPoseHead
 from .hv2_head import HV2Head
 from .segformer_head_pseudo import SegFormerHeadPseudo
-from .proj_head import ProjHead
 
 from .discriminator import DomainDiscriminator
-from .proj_pred_head import ProjPredHead
 from .decoupled_cellpose_head import DecoupledCellPoseHead
-from .proj_pred_head_multi import ProjPredHeadMulti
 from .cellpose_decouple_head import CellPoseDecoupleHead
 
 __all__ = [
@@ -41,9 +38,6 @@ __all__ = [
     'CellPoseHead',
     'HV2Head',
     'SegFormerHeadPseudo',
-    'ProjHead',
-    'ProjPredHead',
     'DecoupledCellPoseHead',
-    'ProjPredHeadMulti',
     'CellPoseDecoupleHead'
 ]
