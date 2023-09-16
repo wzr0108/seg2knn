@@ -24,16 +24,6 @@ except ImportError:
 
 from ..builder import PIPELINES
 from . import transformsgpu
-from imgaug import augmenters as iaa
-
-from .augs import (
-    add_to_brightness,
-    add_to_contrast,
-    add_to_hue,
-    add_to_saturation,
-    gaussian_blur,
-    median_blur,
-)
 
 
 @PIPELINES.register_module()
@@ -1857,87 +1847,3 @@ class BioMedicalGaussianBlur(object):
         repr_str += 'different_sigma_per_axis=' \
                     f'{self.different_sigma_per_axis})'
         return repr_str
-
-
-@PIPELINES.register_module()
-class HVTransform(object):
-    def __init__(self, input_size=(256, 256)):
-        self.input_size = input_size
-        self.shape_augs = [
-            # * order = ``0`` -> ``cv2.INTER_NEAREST``
-            # * order = ``1`` -> ``cv2.INTER_LINEAR``
-            # * order = ``2`` -> ``cv2.INTER_CUBIC``
-            # * order = ``3`` -> ``cv2.INTER_CUBIC``
-            # * order = ``4`` -> ``cv2.INTER_CUBIC``
-            # ! for pannuke v0, no rotation or translation, just flip to avoid mirror padding
-            iaa.Affine(
-                # scale images to 80-120% of their size, individually per axis
-                scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
-                # translate by -A to +A percent (per axis)
-                translate_percent={"x": (-0.01, 0.01), "y": (-0.01, 0.01)},
-                shear=(-5, 5),  # shear by -5 to +5 degrees
-                rotate=(-179, 179),  # rotate by -179 to +179 degrees
-                order=0,  # use nearest neighbour
-                backend="cv2",  # opencv for fast processing
-            ),
-            # set position to 'center' for center crop
-            # else 'uniform' for random crop
-            # iaa.PadToFixedSize(self.input_shape[0], self.input_shape[1]),
-            iaa.CropToFixedSize(
-                self.input_shape[0], self.input_shape[1], position="center"
-            ),
-            iaa.Fliplr(0.5),
-            iaa.Flipud(0.5),
-        ]
-
-        self.input_augs = [
-            iaa.OneOf(
-                [
-                    iaa.Lambda(
-                        func_images=lambda *args: gaussian_blur(*args, max_ksize=3),
-                    ),
-                    iaa.Lambda(
-                        func_images=lambda *args: median_blur(*args, max_ksize=3),
-                    ),
-                    iaa.AdditiveGaussianNoise(
-                        loc=0, scale=(0.0, 0.05 * 255), per_channel=0.5
-                    ),
-                ]
-            ),
-            iaa.Sequential(
-                [
-                    iaa.Lambda(
-                        func_images=lambda *args: add_to_hue(*args, range=(-8, 8)),
-                    ),
-                    iaa.Lambda(
-                        func_images=lambda *args: add_to_saturation(
-                            *args, range=(-0.2, 0.2)
-                        ),
-                    ),
-                    iaa.Lambda(
-                        func_images=lambda *args: add_to_brightness(
-                            *args, range=(-26, 26)
-                        ),
-                    ),
-                    iaa.Lambda(
-                        func_images=lambda *args: add_to_contrast(
-                            *args, range=(0.75, 1.25)
-                        ),
-                    ),
-                ],
-                random_order=True,
-            ),
-        ]
-
-        self.shape_augs = iaa.Sequential(self.shape_augs)
-        self.input_augs = iaa.Sequential(self.input_augs)
-
-    def __call__(self, results):
-        img = results['img']
-        results['img'] = self.shape_augs.augment_image(img)
-        results['img'] = self.input_augs.augment_image(results['img'])
-
-        for key in results.get('seg_fields', []):
-            results[key] = self.shape_augs(results[key])
-
-        return results

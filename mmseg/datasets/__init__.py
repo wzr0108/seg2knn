@@ -10,7 +10,6 @@ from .dataset_wrappers import ConcatDataset, RepeatDataset
 from .gta import GTADataset
 from .synthia import SynthiaDataset
 from .uda_dataset import UDADataset
-from .nuclei_cellpose import NucleiCellPoseDataset, result_to_inst
 from .tamper import TamperDataset
 from .teeth import TeethDataset
 from .ade import ADE20KDataset
@@ -30,8 +29,6 @@ __all__ = [
     'UDADataset',
     'ACDCDataset',
     'DarkZurichDataset',
-    'NucleiCellPoseDataset',
-    'result_to_inst',
     'TamperDataset',
     'TeethDataset',
     'ADE20KDataset',

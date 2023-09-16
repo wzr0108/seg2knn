@@ -16,9 +16,6 @@ import numpy as np
 import cv2
 import os.path as osp
 from collections import OrderedDict
-from functools import reduce
-import warnings
-import scipy
 from scipy import ndimage
 from skimage.segmentation import watershed
 from scipy.ndimage import maximum_filter1d
@@ -29,14 +26,8 @@ from scipy.ndimage import measurements
 import mmcv
 from mmcv.utils import print_log
 from prettytable import PrettyTable
-from torch.utils.data import Dataset
-import torch.nn.functional as F
 
-from mmseg.core import eval_metrics, intersect_and_union, pre_eval_to_metrics
-from mmseg.utils import get_root_logger
-from numba import njit
 from .builder import DATASETS
-from .pipelines import Compose, LoadAnnotations, LoadAnnotationsNpy
 from .nuclei import get_dice_1, get_dice_2, get_fast_dice_2, get_fast_pq, get_fast_aji, get_fast_aji_plus, remap_label, \
     pair_coordinates
 from .custom import CustomDataset
