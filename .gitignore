@@ -4,6 +4,7 @@ pretrained
 .idea
 results
 result
+checkpoints
 
 */*/__pycache__/
 */*/*/__pycache__/
