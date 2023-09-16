@@ -1,0 +1,9 @@
+data
+work_dirs
+pretrained
+.idea
+results
+
+*/*/__pycache__/
+*/*/*/__pycache__/
+
