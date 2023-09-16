@@ -3,6 +3,7 @@ work_dirs
 pretrained
 .idea
 results
+result
 
 */*/__pycache__/
 */*/*/__pycache__/
